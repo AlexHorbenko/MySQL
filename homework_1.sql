@@ -9,9 +9,9 @@ and (hire_date = '1990-01-01' or hire_date > '2000-01-01');
 where first_name = last_name
 */
 #3.     Покажіть номери співробітників 10001, 10002, 10003 і 10004. Виберіть стовпці: first_name, last_name, gender, hire_date.
-/*select emp_no, first_name, last_name, gender, hire_date from employees
-where emp_no in (10001, 10002, 10003, 10004);
-*/
+select emp_no, first_name, last_name, gender, hire_date from employees
+where emp_no between 10001 and 10004;
+
 #4.     Виберіть назви всіх департаментів, назви яких мають букву «а» на будь-якій позиції або «е» на другому місці.
 /*select dept_name from departments
 where dept_name like('%a%')
@@ -29,11 +29,12 @@ and dayofweek(hire_date) = 1;
 where from_date > '1995-06-01';
 */
 #7.     У таблиці dept_emp покажіть кількість співробітників за департаментами (dept_no). To_date має бути більшим за current_date. Покажіть департаменти з понад 13 000 співробітників. Відсотртуйте за кількістю працівників.
-/*select count(emp_no), dept_no from dept_emp
-where to_date > current_date()
+select count(emp_no), dept_no from dept_emp
+where current_date() between from_date and to_date
 group by dept_no
 having count(emp_no) > 13000
 order by count(emp_no) desc;
-*/
+
 #8.     Покажіть мінімальну та максимальну зарплати по працівникам.
-#select max(salary), min(salary) from salaries
+select emp_no, max(salary), min(salary) from salaries
+group by emp_no;
