@@ -46,6 +46,18 @@ join salaries as s
 	on dm.emp_no = s.emp_no
     where s.to_date = '9999-01-01';
 */
+
+SELECT ed.dept_no, dept_name, ee.first_name, ee.last_name, es.salary
+FROM employees.departments AS ed
+INNER JOIN employees.dept_manager AS edm 
+	ON (ed.dept_no = edm.dept_no)
+INNER JOIN employees.employees AS ee 
+	ON (edm.emp_no = ee.emp_no)
+INNER JOIN employees.salaries AS es 
+	ON (ee.emp_no = es.emp_no)
+WHERE NOW() BETWEEN edm.from_date AND edm.to_date 
+AND NOW() BETWEEN es.from_date AND es.to_date;
+
 #3. Покажіть для кожного працівника їхню поточну зарплату та поточну зарплату поточного керівника
 /*
 select s.emp_no as workers,
@@ -91,7 +103,7 @@ order by de.dept_no, e.emp_no;
 select t.title as title, count(t.emp_no) as count from titles as t
 where t.to_date = '9999-01-01'
 group by t.title
-order by count(t.emp_no) desc;
+order by count desc;
 */
 #6. Покажіть повні імена всіх співробітників, які працювали більш ніж в одному відділі.
 /*
@@ -109,7 +121,7 @@ group by salary_year
 order by salary_year;
 */
 #8. Покажіть, скільки працівників було найнято у вихідні дні (субота + неділя), розділивши за статтю
-/*
+
 select count(emp_no) as amount,
 case gender
 	when 'M' then 'masculin'
@@ -117,6 +129,5 @@ case gender
     else 'others'
 end as gender_group
 from employees
-where weekday(hire_date) in (5, 6)
+where weekday(hire_date) between 5 and 6
 group by gender_group;
-*/
