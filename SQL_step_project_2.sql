@@ -11,22 +11,22 @@ create database if not exists course;
 use course;
 
 create table if not exists courses(
-	course_no int unsigned auto_increment,
+	course_no int auto_increment,
     course_name varchar(255) not null,
     start_date date,
     end_date date,
     primary key (course_no));
     
 create table if not exists teachers(
-	teacher_no int unsigned auto_increment,
+	teacher_no int auto_increment,
     teacher_name varchar(255) not null,
     phone_no varchar(15),
     primary key (teacher_no));
 
 create table if not exists students(
-	student_no int unsigned auto_increment,
-    teacher_no int unsigned,
-    course_no int unsigned not null,
+	student_no int auto_increment,
+    teacher_no int not null,
+    course_no int not null,
     student_name varchar(255),
     email varchar(255) not null,
     birth_date date,
