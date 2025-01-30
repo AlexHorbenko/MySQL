@@ -4,9 +4,9 @@
 #1. Покажіть середню зарплату співробітників за кожен рік, до 2005 року.
 
 select year(from_date) as period, avg(salary) as mid_salary from salaries
-where year(from_date) < 2005
+#where year(from_date) < 2005
 group by period
-order by period;
+having period between min(period) and 20005;
 
 #2. Покажіть середню зарплату співробітників по кожному відділу. Примітка: потрібно розрахувати по поточній зарплаті, та поточному відділу співробітників
 
@@ -22,8 +22,8 @@ group by de.dept_no;
 select year(s.to_date) as years, de.dept_no, round(avg(s.salary), 2) as mid_salary from salaries as s
 join dept_emp as de
 	on de.emp_no = s.emp_no
-group by de.dept_no, year(s.to_date)
-order by year(s.to_date);
+group by de.dept_no, years
+order by years;
 
 #4. Покажіть відділи в яких зараз працює більше 15000 співробітників.
 
@@ -38,7 +38,8 @@ select e.emp_no, dm.dept_no, e.hire_date, e.last_name from employees as e
 join dept_manager as dm
 	on dm.emp_no = e.emp_no
 where curdate() between dm.from_date and dm.to_date
-order by dm.dept_no, timestampdiff(day, e.hire_date, curdate()) desc;
+order by timestampdiff(day, e.hire_date, curdate()) desc
+limit 1;
 
 #6. Покажіть топ-10 діючих співробітників компанії з найбільшою різницею між їх зарплатою і середньою зарплатою в їх відділі.
 
@@ -49,12 +50,13 @@ with mid_salary as (
 					where curdate() between s.from_date and s.to_date
 					group by de.dept_no
 )
-select s.emp_no, (ms.avgs - s.salary) as differ_salary, s.salary, ms.avgs from salaries s
+select s.emp_no, abs(ms.avgs - s.salary) as differ_salary, s.salary, ms.avgs from salaries s
 join dept_emp de
 	on de.emp_no = s.emp_no
 join mid_salary ms
 	on ms.dept_no = de.dept_no
 where curdate() between s.from_date and s.to_date
+and curdate() between de.from_date and de.to_date
 order by differ_salary desc
 limit 10;
 
